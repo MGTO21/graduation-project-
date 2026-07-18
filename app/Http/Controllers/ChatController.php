@@ -100,8 +100,12 @@ class ChatController extends Controller
             return;
         }
 
+        // department_id فاضي معناه المقرر مشترك بين كل الأقسام
+        $sameDepartment = $courseOffering->department_id === null
+            || $courseOffering->department_id === $user->department_id;
+
         if ($user->role === 'student'
-            && $courseOffering->department_id === $user->department_id
+            && $sameDepartment
             && $courseOffering->semester_id === $user->semester_id) {
             return;
         }

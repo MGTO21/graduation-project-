@@ -20,7 +20,7 @@
                 @foreach($courseOfferings as $offering)
                     <option value="{{ $offering->id }}"
                         {{ old('course_offering_id') == $offering->id ? 'selected' : '' }}>
-                        {{ $offering->course->name }} - {{ $offering->department->name }} - {{ $offering->semester->name }} - {{ $offering->lecturer->name }}
+                        {{ $offering->course->name }} - {{ $offering->department->name ?? 'كل الأقسام' }} - {{ $offering->semester->name }} - {{ $offering->lecturer->name }}
                     </option>
                 @endforeach
             </select>

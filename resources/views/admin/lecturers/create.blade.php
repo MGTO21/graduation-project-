@@ -8,7 +8,7 @@
 
 <div class="card max-w-2xl">
 
-    <form action="{{ route('admin.lecturers.store') }}" method="POST">
+    <form action="{{ route('admin.lecturers.store') }}" method="POST" autocomplete="off">
 
         @csrf
 
@@ -16,7 +16,7 @@
             <label class="input-label">الرقم الجامعي</label>
             <input type="text" name="university_id"
                    value="{{ old('university_id') }}"
-                   class="input-field" required>
+                   class="input-field" required autocomplete="off">
 
             @error('university_id')
                 <p class="error-text">{{ $message }}</p>
@@ -27,7 +27,7 @@
             <label class="input-label">الاسم</label>
             <input type="text" name="name"
                    value="{{ old('name') }}"
-                   class="input-field" required>
+                   class="input-field" required autocomplete="off">
 
             @error('name')
                 <p class="error-text">{{ $message }}</p>
@@ -38,7 +38,7 @@
             <label class="input-label">البريد الإلكتروني</label>
             <input type="email" name="email"
                    value="{{ old('email') }}"
-                   class="input-field" required>
+                   class="input-field" required autocomplete="off">
 
             @error('email')
                 <p class="error-text">{{ $message }}</p>
@@ -49,7 +49,7 @@
             <label class="input-label">رقم الهاتف</label>
             <input type="text" name="phone"
                    value="{{ old('phone') }}"
-                   class="input-field">
+                   class="input-field" autocomplete="off">
 
             @error('phone')
                 <p class="error-text">{{ $message }}</p>
@@ -81,7 +81,7 @@
             <input type="password"
                    name="password"
                    class="input-field"
-                   required>
+                   required autocomplete="new-password">
 
             @error('password')
                 <p class="error-text">{{ $message }}</p>

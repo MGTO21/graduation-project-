@@ -32,7 +32,7 @@
 </div>
 
 <p class="text-muted text-sm mb-8 pr-3">
-    {{ $courseOffering->department->name ?? '' }}
+    {{ $courseOffering->department->name ?? 'كل الأقسام' }}
     |
     تاريخ المحاضرة: {{ $lecture->lecture_date }}
 </p>

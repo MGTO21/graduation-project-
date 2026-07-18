@@ -59,14 +59,15 @@ class CourseOfferingController extends Controller
 {
     $request->validate([
         'course_id' => 'required|exists:courses,id',
-        'department_id' => 'required|exists:departments,id',
+        // department_id فاضي معناه "كل الأقسام" (مادة مشتركة) - مش خطأ تحقق
+        'department_id' => 'nullable|exists:departments,id',
         'semester_id' => 'required|exists:semesters,id',
         'lecturer_id' => 'required|exists:users,id',
     ]);
 
     CourseOffering::create([
         'course_id' => $request->course_id,
-        'department_id' => $request->department_id,
+        'department_id' => $request->department_id ?: null,
         'semester_id' => $request->semester_id,
         'lecturer_id' => $request->lecturer_id,
         'is_active' => true,
@@ -119,14 +120,15 @@ class CourseOfferingController extends Controller
 {
     $request->validate([
         'course_id'     => 'required|exists:courses,id',
-        'department_id' => 'required|exists:departments,id',
+        // department_id فاضي معناه "كل الأقسام" (مادة مشتركة) - مش خطأ تحقق
+        'department_id' => 'nullable|exists:departments,id',
         'semester_id'   => 'required|exists:semesters,id',
         'lecturer_id'   => 'required|exists:users,id',
     ]);
 
     $courseOffering->update([
         'course_id'     => $request->course_id,
-        'department_id' => $request->department_id,
+        'department_id' => $request->department_id ?: null,
         'semester_id'   => $request->semester_id,
         'lecturer_id'   => $request->lecturer_id,
     ]);

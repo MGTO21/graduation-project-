@@ -26,7 +26,7 @@
             </p>
 
             <p class="text-xs text-muted mb-3">
-                {{ $schedule->courseOffering->department->name }} — {{ $schedule->courseOffering->semester->name }}
+                {{ $schedule->courseOffering->department->name ?? 'كل الأقسام' }} — {{ $schedule->courseOffering->semester->name }}
                 <br>
                 {{ substr($schedule->start_time, 0, 5) }} - {{ substr($schedule->end_time, 0, 5) }}
             </p>
@@ -79,7 +79,7 @@
         @forelse($courseOfferings as $offering)
             <tr>
                 <td>{{ $offering->course->name }}</td>
-                <td>{{ $offering->department->name }}</td>
+                <td>{{ $offering->department->name ?? 'كل الأقسام' }}</td>
                 <td>{{ $offering->semester->name }}</td>
                 <td>
                     <div class="flex items-center gap-2">
@@ -148,7 +148,7 @@
                             </p>
 
                             <p class="text-xs text-muted mb-1">
-                                {{ $schedule->courseOffering->department->name }} — {{ $schedule->courseOffering->semester->name }}
+                                {{ $schedule->courseOffering->department->name ?? 'كل الأقسام' }} — {{ $schedule->courseOffering->semester->name }}
                             </p>
 
                             <p class="text-xs font-medium text-gold">

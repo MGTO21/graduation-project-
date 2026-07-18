@@ -12,6 +12,41 @@
     </a>
 </div>
 
+{{-- فلترة القائمة حسب القسم والسمستر - أي تغيير في الاختيار يعيد تحميل الصفحة بنفس الفلتر --}}
+<form method="GET" class="flex flex-wrap items-end gap-4 mb-6">
+
+    <div>
+        <label class="input-label">القسم</label>
+        <select name="department_id" class="input-field" onchange="this.form.submit()">
+            <option value="">كل الأقسام</option>
+            @foreach($departments as $department)
+                <option value="{{ $department->id }}" {{ request('department_id') == $department->id ? 'selected' : '' }}>
+                    {{ $department->name }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+
+    <div>
+        <label class="input-label">السمستر</label>
+        <select name="semester_id" class="input-field" onchange="this.form.submit()">
+            <option value="">كل السمسترات</option>
+            @foreach($semesters as $semester)
+                <option value="{{ $semester->id }}" {{ request('semester_id') == $semester->id ? 'selected' : '' }}>
+                    {{ $semester->name }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+
+    @if(request('department_id') || request('semester_id'))
+        <a href="{{ route('admin.students.index') }}" class="btn-ghost !py-2.5">
+            إلغاء الفلترة
+        </a>
+    @endif
+
+</form>
+
 <table class="table-n">
     <thead>
         <tr>

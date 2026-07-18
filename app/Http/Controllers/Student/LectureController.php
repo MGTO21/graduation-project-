@@ -16,9 +16,12 @@ class LectureController extends Controller
 
         $courseOffering = $lecture->lectureSchedule->courseOffering;
 
-        // حماية: الطالب لا يصل إلا لمحاضرات قسمه وسمستره
-        if ($courseOffering->department_id !== $student->department_id
-            || $courseOffering->semester_id !== $student->semester_id) {
+        // حماية: الطالب لا يصل إلا لمحاضرات قسمه وسمستره - إلا لو المقرر "كل الأقسام"
+        // (department_id فاضي = مادة مشتركة، يشوفها طلاب كل الأقسام في نفس السمستر)
+        $sameDepartment = $courseOffering->department_id === null
+            || $courseOffering->department_id === $student->department_id;
+
+        if (! $sameDepartment || $courseOffering->semester_id !== $student->semester_id) {
             abort(403, 'غير مصرح لك بالوصول إلى هذه المحاضرة.');
         }
 

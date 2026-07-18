@@ -50,7 +50,7 @@
                             </p>
 
                             <p class="text-xs text-muted mb-0.5">
-                                {{ $schedule->courseOffering->department->name }}
+                                {{ $schedule->courseOffering->department->name ?? 'كل الأقسام' }}
                             </p>
 
                             <p class="text-xs text-body mb-1">

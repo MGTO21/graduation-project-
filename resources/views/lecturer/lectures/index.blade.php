@@ -19,7 +19,7 @@
 </div>
 
 <p class="text-muted text-sm mb-8 pr-3">
-    {{ $courseOffering->department->name }} — {{ $courseOffering->semester->name }}
+    {{ $courseOffering->department->name ?? 'كل الأقسام' }} — {{ $courseOffering->semester->name }}
 </p>
 
 <div class="space-y-6">

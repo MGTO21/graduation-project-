@@ -33,7 +33,10 @@
         <div class="mb-5">
             <label class="input-label">القسم</label>
 
-            <select name="department_id" class="input-field" required>
+            <select name="department_id" class="input-field">
+                <option value="" {{ is_null($courseOffering->department_id) ? 'selected' : '' }}>
+                    كل الأقسام (مادة مشتركة)
+                </option>
                 @foreach($departments as $department)
                     <option value="{{ $department->id }}"
                         {{ $courseOffering->department_id == $department->id ? 'selected' : '' }}>
@@ -41,6 +44,8 @@
                     </option>
                 @endforeach
             </select>
+
+            <p class="text-xs text-muted mt-1.5">اختر "كل الأقسام" لو المقرر عام ومشترك بين كل الأقسام.</p>
 
             @error('department_id')
                 <p class="error-text">{{ $message }}</p>

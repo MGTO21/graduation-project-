@@ -8,7 +8,7 @@
 
 <div class="card max-w-2xl">
 
-    <form action="{{ route('admin.students.update', $student) }}" method="POST">
+    <form action="{{ route('admin.students.update', $student) }}" method="POST" autocomplete="off">
 
         @csrf
         @method('PUT')

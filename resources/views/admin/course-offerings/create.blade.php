@@ -32,14 +32,16 @@
         <div class="mb-5">
             <label class="input-label">القسم</label>
 
-            <select name="department_id" class="input-field" required>
-                <option value="">اختر القسم</option>
+            <select name="department_id" class="input-field">
+                <option value="">كل الأقسام (مادة مشتركة)</option>
                 @foreach($departments as $department)
                     <option value="{{ $department->id }}">
                         {{ $department->name }}
                     </option>
                 @endforeach
             </select>
+
+            <p class="text-xs text-muted mt-1.5">اترك الاختيار على "كل الأقسام" لو المقرر عام ومشترك بين كل الأقسام.</p>
 
             @error('department_id')
                 <p class="error-text">{{ $message }}</p>

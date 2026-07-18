@@ -28,12 +28,15 @@ class DashboardController extends Controller
     {
         $student = auth()->user()->load(['department', 'semester']);
 
-        // مقررات قسم وسمستر الطالب
+        // مقررات قسم وسمستر الطالب - مع المقررات المشتركة بين كل الأقسام (department_id فاضي)
         $courseOfferings = CourseOffering::with([
             'course',
             'lecturer',
         ])
-        ->where('department_id', $student->department_id)
+        ->where(function ($query) use ($student) {
+            $query->where('department_id', $student->department_id)
+                  ->orWhereNull('department_id');
+        })
         ->where('semester_id', $student->semester_id)
         ->where('is_active', true)
         ->get();

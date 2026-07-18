@@ -13,13 +13,18 @@ class StudentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
 {
     $students = User::where('role', 'student')
+        ->when($request->filled('department_id'), fn ($query) => $query->where('department_id', $request->department_id))
+        ->when($request->filled('semester_id'), fn ($query) => $query->where('semester_id', $request->semester_id))
         ->orderBy('name')
         ->get();
 
-    return view('admin.students.index', compact('students'));
+    $departments = Department::orderBy('name')->get();
+    $semesters = Semester::orderBy('number')->get();
+
+    return view('admin.students.index', compact('students', 'departments', 'semesters'));
 }
     /**
      * Show the form for creating a new resource.

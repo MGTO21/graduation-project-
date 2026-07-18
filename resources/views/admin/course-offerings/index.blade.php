@@ -28,7 +28,7 @@
     @foreach($courseOffering as $courseOffering)
         <tr>
             <td>{{ $courseOffering->course->name }}</td>
-            <td>{{ $courseOffering->department->name }}</td>
+            <td>{{ $courseOffering->department->name ?? 'كل الأقسام' }}</td>
             <td>{{ $courseOffering->semester->name }}</td>
             <td>{{ $courseOffering->lecturer->name }}</td>
             <td>
