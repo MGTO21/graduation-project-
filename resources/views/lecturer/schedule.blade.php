@@ -6,56 +6,54 @@
     جدولي الأسبوعي
 </h2>
 
-{{-- الأيام بالطول: كل يوم صف كامل العرض، مواعيده جنب بعض جواه - بدل ما تكون الأيام أعمدة جنب بعض --}}
-<div class="space-y-4">
+{{-- عمود واحد لليوم، وقصاده في نفس الصف كل محاضرات اليوم ده مع بعض --}}
+<div class="overflow-x-auto">
+    <table class="table-n">
+        <thead>
+            <tr>
+                <th class="w-32">اليوم</th>
+                <th>المحاضرات</th>
+            </tr>
+        </thead>
 
-    @foreach($days as $dayKey => $dayName)
+        <tbody>
+            @foreach($days as $dayKey => $dayName)
+                <tr class="{{ now()->format('l') === $dayKey ? 'day-today' : '' }} align-top">
+                    <td>
+                        <span class="font-cairo font-bold text-ink">{{ $dayName }}</span>
+                        @if(now()->format('l') === $dayKey)
+                            <span class="block text-[10px] text-gold mt-0.5">اليوم</span>
+                        @endif
+                    </td>
+                    <td>
+                        @if(isset($schedules[$dayKey]) && $schedules[$dayKey]->count())
+                            <div class="flex flex-wrap gap-3">
+                                @foreach($schedules[$dayKey] as $schedule)
+                                    <div class="slot-card min-w-[220px]">
 
-        <div class="border border-line rounded-sm {{ now()->format('l') === $dayKey ? 'day-today' : 'bg-white' }}">
+                                        <p class="font-cairo font-bold text-ink text-sm mb-1">
+                                            {{ $schedule->courseOffering->course->name }}
+                                        </p>
 
-            <div class="px-4 py-2.5 border-b border-line flex items-center gap-2">
-                <span class="font-cairo font-bold text-ink">{{ $dayName }}</span>
-                @if(now()->format('l') === $dayKey)
-                    <span class="text-[10px] text-gold">اليوم</span>
-                @endif
-            </div>
+                                        <p class="text-xs text-muted mb-1">
+                                            {{ $schedule->courseOffering->department->name ?? 'كل الأقسام' }} — {{ $schedule->courseOffering->semester->name }}
+                                        </p>
 
-            <div class="p-4">
+                                        <p class="text-xs font-medium text-gold">
+                                            {{ substr($schedule->start_time, 0, 5) }} - {{ substr($schedule->end_time, 0, 5) }}
+                                        </p>
 
-                @if(isset($schedules[$dayKey]) && $schedules[$dayKey]->count())
-
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                        @foreach($schedules[$dayKey] as $schedule)
-                            <div class="slot-card">
-
-                                <p class="font-cairo font-bold text-ink text-sm mb-1">
-                                    {{ $schedule->courseOffering->course->name }}
-                                </p>
-
-                                <p class="text-xs text-muted mb-1">
-                                    {{ $schedule->courseOffering->department->name ?? 'كل الأقسام' }} — {{ $schedule->courseOffering->semester->name }}
-                                </p>
-
-                                <p class="text-xs font-medium text-gold">
-                                    {{ substr($schedule->start_time, 0, 5) }} - {{ substr($schedule->end_time, 0, 5) }}
-                                </p>
-
+                                    </div>
+                                @endforeach
                             </div>
-                        @endforeach
-                    </div>
-
-                @else
-                    <p class="text-muted text-xs text-center py-4">
-                        لا توجد محاضرات
-                    </p>
-                @endif
-
-            </div>
-
-        </div>
-
-    @endforeach
-
+                        @else
+                            <span class="text-muted text-xs">لا توجد محاضرات</span>
+                        @endif
+                    </td>
+                </tr>
+            @endforeach
+        </tbody>
+    </table>
 </div>
 
 @endsection
