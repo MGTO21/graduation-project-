@@ -68,11 +68,35 @@ class DashboardController extends Controller
             ->get()
             ->keyBy(fn (Lecture $lecture) => $lecture->lectureSchedule->course_offering_id);
 
-        $days = $this->days;
-
         return view('lecturer.dashboard', compact(
-            'lecturer', 'courseOfferings', 'schedules', 'days',
+            'lecturer', 'courseOfferings',
             'todayLectures', 'todaySchedules', 'liveLecturesByOffering'
         ));
+    }
+
+    /**
+     * صفحة الجدول الأسبوعي لوحدها (كانت جوا الرئيسية، فصلناها لتبويب مستقل في القائمة الجانبية)
+     */
+    public function schedule()
+    {
+        $lecturer = auth()->user();
+
+        $courseOfferings = CourseOffering::where('lecturer_id', $lecturer->id)
+            ->where('is_active', true)
+            ->pluck('id');
+
+        $schedules = LectureSchedule::with([
+            'courseOffering.course',
+            'courseOffering.department',
+            'courseOffering.semester',
+        ])
+        ->whereIn('course_offering_id', $courseOfferings)
+        ->orderBy('start_time')
+        ->get()
+        ->groupBy('day');
+
+        $days = $this->days;
+
+        return view('lecturer.schedule', compact('schedules', 'days'));
     }
 }

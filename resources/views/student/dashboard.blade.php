@@ -39,7 +39,7 @@
     مقررات السمستر الحالي
 </h3>
 
-<table class="table-n mb-12">
+<table class="table-n">
     <thead>
         <tr>
             <th>رمز المقرر</th>
@@ -65,138 +65,6 @@
             <tr>
                 <td colspan="4" class="text-center !py-8 text-muted">
                     لا توجد مقررات مسجلة لقسمك وسمسترك حالياً
-                </td>
-            </tr>
-        @endforelse
-    </tbody>
-</table>
-
-{{-- الجدول الأسبوعي --}}
-<h3 class="section-title mb-4">
-    جدولي الأسبوعي
-</h3>
-
-<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4 mb-12">
-
-    @foreach($days as $dayKey => $dayName)
-
-        <div class="border border-line rounded-sm {{ now()->format('l') === $dayKey ? 'day-today' : 'bg-white' }}">
-
-            <div class="px-3 py-2.5 border-b border-line text-center">
-                <span class="font-cairo font-bold text-ink text-sm">{{ $dayName }}</span>
-                @if(now()->format('l') === $dayKey)
-                    <span class="block text-[10px] text-gold">اليوم</span>
-                @endif
-            </div>
-
-            <div class="p-3 space-y-3">
-
-                @if(isset($schedules[$dayKey]) && $schedules[$dayKey]->count())
-
-                    @foreach($schedules[$dayKey] as $schedule)
-                        <div class="slot-card">
-
-                            <p class="font-cairo font-bold text-ink text-sm mb-1">
-                                {{ $schedule->courseOffering->course->name }}
-                            </p>
-
-                            <p class="text-xs text-muted mb-1">
-                                {{ $schedule->courseOffering->lecturer->name }}
-                            </p>
-
-                            <p class="text-xs font-medium text-gold">
-                                {{ substr($schedule->start_time, 0, 5) }} - {{ substr($schedule->end_time, 0, 5) }}
-                            </p>
-
-                        </div>
-                    @endforeach
-
-                @else
-                    <p class="text-muted text-xs text-center py-6">
-                        لا توجد محاضرات
-                    </p>
-                @endif
-
-            </div>
-
-        </div>
-
-    @endforeach
-
-</div>
-
-{{-- المحاضرات المرفوعة --}}
-<h3 class="section-title mb-4">
-    المحاضرات المرفوعة
-</h3>
-
-<table class="table-n">
-    <thead>
-        <tr>
-            <th>المقرر</th>
-            <th>المحاضر</th>
-            <th>تاريخ المحاضرة</th>
-            <th>عدد الملفات</th>
-            <th>الإجراءات</th>
-        </tr>
-    </thead>
-
-    <tbody>
-        @forelse($lectures as $lecture)
-            <tr>
-                <td>{{ $lecture->lectureSchedule->courseOffering->course->name }}</td>
-                <td>{{ $lecture->lectureSchedule->courseOffering->lecturer->name }}</td>
-                <td>{{ $lecture->lecture_date }}</td>
-                <td>{{ $lecture->files->count() }}</td>
-                <td>
-                    <a href="{{ route('student.lectures.show', $lecture) }}" class="btn-outline !px-3 !py-1 !text-xs">
-                        مشاهدة المحاضرة
-                    </a>
-                </td>
-            </tr>
-        @empty
-            <tr>
-                <td colspan="5" class="text-center !py-8 text-muted">
-                    لا توجد محاضرات مرفوعة بعد
-                </td>
-            </tr>
-        @endforelse
-    </tbody>
-</table>
-
-{{-- المحاضرات المباشرة التي انتهت (بثوث سابقة) --}}
-<h3 class="section-title mb-4 mt-12">
-    محاضرات سابقة
-</h3>
-
-<table class="table-n">
-    <thead>
-        <tr>
-            <th>المقرر</th>
-            <th>المحاضر</th>
-            <th>تاريخ المحاضرة</th>
-            <th>عدد الملفات</th>
-            <th>الإجراءات</th>
-        </tr>
-    </thead>
-
-    <tbody>
-        @forelse($pastLectures as $lecture)
-            <tr>
-                <td>{{ $lecture->lectureSchedule->courseOffering->course->name }}</td>
-                <td>{{ $lecture->lectureSchedule->courseOffering->lecturer->name }}</td>
-                <td>{{ $lecture->lecture_date }}</td>
-                <td>{{ $lecture->files->count() }}</td>
-                <td>
-                    <a href="{{ route('student.lectures.show', $lecture) }}" class="btn-outline !px-3 !py-1 !text-xs">
-                        عرض المحاضرة
-                    </a>
-                </td>
-            </tr>
-        @empty
-            <tr>
-                <td colspan="5" class="text-center !py-8 text-muted">
-                    لا توجد محاضرات سابقة بعد
                 </td>
             </tr>
         @endforelse

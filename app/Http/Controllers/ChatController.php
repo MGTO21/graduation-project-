@@ -60,6 +60,7 @@ class ChatController extends Controller
         return response()->json([
             'messages' => $messages->map(fn (ChatMessage $m) => [
                 'id'      => $m->id,
+                'user_id' => $m->user_id,
                 'name'    => $m->user->name,
                 'role'    => $m->user->role,
                 'message' => $m->message,

@@ -21,6 +21,16 @@
                 الرئيسية
             </a>
 
+            <a href="{{ route('lecturer.schedule') }}"
+               class="side-link {{ request()->routeIs('lecturer.schedule') ? 'side-link-active' : '' }}">
+                الجدول الأسبوعي
+            </a>
+
+            <a href="{{ route('profile.edit') }}"
+               class="side-link {{ request()->routeIs('profile.edit') ? 'side-link-active' : '' }}">
+                الملف الشخصي
+            </a>
+
         </nav>
     </aside>
 

@@ -21,6 +21,26 @@
                 الرئيسية
             </a>
 
+            <a href="{{ route('student.schedule') }}"
+               class="side-link {{ request()->routeIs('student.schedule') ? 'side-link-active' : '' }}">
+                الجدول الأسبوعي
+            </a>
+
+            <a href="{{ route('student.lectures.index') }}"
+               class="side-link {{ request()->routeIs('student.lectures.index') ? 'side-link-active' : '' }}">
+                المحاضرات المرفوعة
+            </a>
+
+            <a href="{{ route('student.lectures.past') }}"
+               class="side-link {{ request()->routeIs('student.lectures.past') ? 'side-link-active' : '' }}">
+                محاضرات سابقة
+            </a>
+
+            <a href="{{ route('profile.edit') }}"
+               class="side-link {{ request()->routeIs('profile.edit') ? 'side-link-active' : '' }}">
+                الملف الشخصي
+            </a>
+
         </nav>
     </aside>
 

@@ -26,6 +26,11 @@ class ProfileUpdateRequest extends FormRequest
                 'max:255',
                 Rule::unique(User::class)->ignore($this->user()->id),
             ],
+            'phone' => ['nullable', 'string', 'max:20'],
+            // ملاحظة: مقصود عدم وجود قواعد لـ university_id أو department_id أو
+            // semester_id هنا - المستخدم ما يقدر يغيرهم من صفحة ملفه الشخصي أصلاً،
+            // بس الأدمن يقدر من لوحته
+            'profile_image' => ['nullable', 'image', 'max:2048'],
         ];
     }
 }

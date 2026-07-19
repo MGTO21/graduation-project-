@@ -58,6 +58,9 @@ Route::middleware(['auth', 'role:lecturer'])
         Route::get('/dashboard', [LecturerDashboardController::class, 'index'])
             ->name('dashboard');
 
+        Route::get('/schedule', [LecturerDashboardController::class, 'schedule'])
+            ->name('schedule');
+
         // إدارة محاضرات مقرر معين
         Route::get('/course-offerings/{courseOffering}/lectures', [LecturerLectureController::class, 'index'])
             ->name('lectures.index');
@@ -99,6 +102,17 @@ Route::middleware(['auth', 'role:student'])
         Route::get('/dashboard', [StudentDashboardController::class, 'index'])
             ->name('dashboard');
 
+        Route::get('/schedule', [StudentDashboardController::class, 'schedule'])
+            ->name('schedule');
+
+        // مسارات ثابتة زي /lectures و/lectures/past لازم تتسجل قبل /lectures/{lecture}
+        // وإلا Laravel هيحاول يفهم "past" كأنه id محاضرة ويطلع خطأ
+        Route::get('/lectures', [StudentLectureController::class, 'index'])
+            ->name('lectures.index');
+
+        Route::get('/lectures/past', [StudentLectureController::class, 'past'])
+            ->name('lectures.past');
+
         Route::get('/lectures/{lecture}', [StudentLectureController::class, 'show'])
             ->name('lectures.show');
 
@@ -132,11 +146,6 @@ Route::middleware('auth')->group(function () {
 
     Route::patch('/profile', [ProfileController::class, 'update'])
         ->name('profile.update');
-
-    Route::delete('/profile', [ProfileController::class, 'destroy'])
-        ->name('profile.destroy');
-
-    
 
 });
 
