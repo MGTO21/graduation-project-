@@ -18,7 +18,8 @@
 
     <tbody>
         @forelse($answers as $answer)
-            <tr>
+            {{-- الصف كامل رابط لصفحة السؤال نفسه، عشان الطالب يقدر يراجع تفاصيله (الخيارات والإجابة الصحيحة) --}}
+            <tr class="cursor-pointer hover:bg-gold/5" onclick="window.location='{{ route('student.quizzes.show', $answer->quiz) }}'">
                 <td>{{ $answer->quiz->courseOffering->course->name }}</td>
                 <td>{{ mb_strlen($answer->quiz->question) > 60 ? mb_substr($answer->quiz->question, 0, 60) . '...' : $answer->quiz->question }}</td>
                 <td>{{ strtoupper($answer->selected_option) }}</td>

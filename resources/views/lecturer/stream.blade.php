@@ -16,6 +16,11 @@
             البث مباشر الآن
         </span>
 
+        {{-- بتفتح في تاب جديد عشان المحاضر يفضل شغال في صفحة البث وهو بيدير الكويز --}}
+        <a href="{{ route('lecturer.quizzes.index', $courseOffering) }}" target="_blank" class="btn-ghost">
+            اختبار فوري
+        </a>
+
         <form action="{{ route('lecturer.stream.end', $lecture) }}" method="POST" class="inline">
             @csrf
             <button
