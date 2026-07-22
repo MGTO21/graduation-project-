@@ -175,6 +175,12 @@ Route::middleware('auth')
     ->get('/quizzes/{quiz}/status', [QuizController::class, 'status'])
     ->name('quizzes.status');
 
+// هل فيه سؤال شغال دلوقتي لهذا المقرر؟ تستخدمها صفحة بث الطالب عشان تكتشف كويز
+// جديد بدون ما يسيب صفحة البث
+Route::middleware('auth')
+    ->get('/course-offerings/{courseOffering}/quizzes/active', [QuizController::class, 'activeForCourse'])
+    ->name('quizzes.active-for-course');
+
 Route::middleware('auth')->group(function () {
 
     Route::get('/profile', [ProfileController::class, 'edit'])

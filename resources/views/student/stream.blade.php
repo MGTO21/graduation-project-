@@ -16,6 +16,22 @@
     المحاضر: {{ $courseOffering->lecturer->name }}
 </p>
 
+{{-- بتبان لوحدها لو المحاضر أطلق كويز وهو الطالب لسه قاعد يتابع اللايف - بتتفتح في
+     تاب جديد عشان الطالب يجاوب من غير ما يسيب صفحة البث --}}
+<div id="quiz-live-banner" class="hidden card !border-warning !border-2 mb-6 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+        <span class="relative flex h-3 w-3">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-warning opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-3 w-3 bg-warning"></span>
+        </span>
+        <p class="font-cairo font-bold text-ink text-sm">في اختبار فوري الآن - أجب من غير ما تسيب البث</p>
+    </div>
+
+    <a id="quiz-live-link" href="#" target="_blank" class="btn-gold !px-4 !py-1.5 !text-xs">
+        دخول الاختبار
+    </a>
+</div>
+
 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
     {{-- منطقة عرض البث --}}
@@ -85,6 +101,39 @@ peer.on('call', (call) => {
 peer.on('error', (err) => {
     studentStatus.innerHTML = '<p class="text-sm text-danger">خطأ في الاتصال: ' + err.type + '</p>';
 });
+
+/*
+ * نفس فكرة polling الشات بالظبط: كل 3 ثواني نسأل السيرفر "فيه كويز شغال دلوقتي
+ * لهذا المقرر؟" - محتاجينها هنا تحديداً لأن الطالب ممكن يفضل قاعد على صفحة البث
+ * ساعة كاملة، ولو المحاضر أطلق سؤال في نص المحاضرة لازم يعرف من غير ما يخرج
+ * من صفحة البث عشان يشوف لوحته. لو ظهر سؤال نبيّن البطاقة، ولو خلص وقته
+ * (أو المحاضر ما أطلقش سؤال تاني) نخفيها تاني.
+ */
+(function () {
+    const banner = document.getElementById('quiz-live-banner');
+    const link = document.getElementById('quiz-live-link');
+    const checkUrl = @json(route('quizzes.active-for-course', $courseOffering));
+    const quizShowUrlTemplate = @json(route('student.quizzes.show', ['quiz' => '__ID__']));
+
+    function checkActiveQuiz() {
+        fetch(checkUrl)
+            .then(res => res.json())
+            .then(data => {
+                if (data.active) {
+                    link.href = quizShowUrlTemplate.replace('__ID__', data.quiz_id);
+                    banner.classList.remove('hidden');
+                } else {
+                    banner.classList.add('hidden');
+                }
+            })
+            .catch(() => {
+                // خطأ شبكة عابر، ننتظر المحاولة الجاية
+            });
+    }
+
+    checkActiveQuiz();
+    setInterval(checkActiveQuiz, 3000);
+})();
 </script>
 
 @endsection

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CourseOffering;
 use App\Models\Quiz;
 use Illuminate\Http\Request;
 
@@ -58,6 +59,55 @@ class QuizController extends Controller
         }
 
         return response()->json($response);
+    }
+
+    /**
+     * هل فيه سؤال شغال دلوقتي لهذا المقرر؟ محتاجينها في صفحة بث الطالب - لو المحاضر
+     * أطلق كويز والطالب قاعد يتابع اللايف، لازم يعرف من غير ما يسيب صفحة البث أصلاً
+     * (شوف student/stream.blade.php، بتسأل الـ endpoint ده كل 3 ثواني نفس الشات بالظبط)
+     */
+    public function activeForCourse(CourseOffering $courseOffering)
+    {
+        $user = auth()->user();
+
+        $this->authorizeCourseAccess($courseOffering, $user);
+
+        $quiz = Quiz::where('course_offering_id', $courseOffering->id)
+            ->where('status', 'active')
+            ->first();
+
+        $quiz?->refreshStatusIfExpired();
+
+        if ($quiz && $quiz->status !== 'active') {
+            $quiz = null;
+        }
+
+        return response()->json([
+            'active'  => (bool) $quiz,
+            'quiz_id' => $quiz->id ?? null,
+        ]);
+    }
+
+    /**
+     * نفس منطق صلاحية الشات بالظبط: المحاضر لازم يكون محاضر هذا المقرر، والطالب
+     * لازم يكون من نفس قسمه وسمستره (أو مقرر مشترك بين كل الأقسام)
+     */
+    private function authorizeCourseAccess(CourseOffering $courseOffering, $user): void
+    {
+        if ($user->role === 'lecturer' && $courseOffering->lecturer_id === $user->id) {
+            return;
+        }
+
+        if ($user->role === 'student') {
+            $sameDepartment = $courseOffering->department_id === null
+                || $courseOffering->department_id === $user->department_id;
+
+            if ($sameDepartment && $courseOffering->semester_id === $user->semester_id) {
+                return;
+            }
+        }
+
+        abort(403, 'غير مصرح لك بالوصول إلى بيانات هذا المقرر.');
     }
 
     /**
