@@ -90,6 +90,10 @@
                             الشات
                         </a>
 
+                        <a href="{{ route('lecturer.quizzes.index', $offering) }}" class="btn-ghost !px-3 !py-1 !text-xs">
+                            اختبار فوري
+                        </a>
+
                         {{-- بث طارئ: يفتح بث فوري لهذا المقرر حتى لو اليوم ما فيه موعد مجدول --}}
                         @php $liveLecture = $liveLecturesByOffering->get($offering->id); @endphp
 

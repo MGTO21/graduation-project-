@@ -36,6 +36,11 @@
                 محاضرات سابقة
             </a>
 
+            <a href="{{ route('student.quizzes.history') }}"
+               class="side-link {{ request()->routeIs('student.quizzes.*') ? 'side-link-active' : '' }}">
+                اختباراتي السابقة
+            </a>
+
             <a href="{{ route('profile.edit') }}"
                class="side-link {{ request()->routeIs('profile.edit') ? 'side-link-active' : '' }}">
                 الملف الشخصي

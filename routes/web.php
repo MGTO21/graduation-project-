@@ -11,10 +11,13 @@ use App\Http\Controllers\Admin\LectureScheduleController;
 use App\Http\Controllers\Lecturer\DashboardController as LecturerDashboardController;
 use App\Http\Controllers\Lecturer\LectureController as LecturerLectureController;
 use App\Http\Controllers\Lecturer\StreamController as LecturerStreamController;
+use App\Http\Controllers\Lecturer\QuizController as LecturerQuizController;
 use App\Http\Controllers\Student\DashboardController as StudentDashboardController;
 use App\Http\Controllers\Student\LectureController as StudentLectureController;
 use App\Http\Controllers\Student\StreamController as StudentStreamController;
+use App\Http\Controllers\Student\QuizController as StudentQuizController;
 use App\Http\Controllers\ChatController;
+use App\Http\Controllers\QuizController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -91,6 +94,22 @@ Route::middleware(['auth', 'role:lecturer'])
         Route::post('/lectures/{lecture}/stream/end', [LecturerStreamController::class, 'end'])
             ->name('stream.end');
 
+        // الاختبارات الفورية (كويز)
+        Route::get('/course-offerings/{courseOffering}/quizzes', [LecturerQuizController::class, 'index'])
+            ->name('quizzes.index');
+
+        Route::get('/course-offerings/{courseOffering}/quizzes/create', [LecturerQuizController::class, 'create'])
+            ->name('quizzes.create');
+
+        Route::post('/course-offerings/{courseOffering}/quizzes', [LecturerQuizController::class, 'store'])
+            ->name('quizzes.store');
+
+        Route::get('/quizzes/{quiz}', [LecturerQuizController::class, 'show'])
+            ->name('quizzes.show');
+
+        Route::post('/quizzes/{quiz}/launch', [LecturerQuizController::class, 'launch'])
+            ->name('quizzes.launch');
+
     });
 
 // لوحة الطالب: محمية بدور student
@@ -120,6 +139,17 @@ Route::middleware(['auth', 'role:student'])
         Route::get('/lectures/{lecture}/watch', [StudentStreamController::class, 'show'])
             ->name('stream.watch');
 
+        // الاختبارات الفورية (كويز) - /quizzes/history لازم تتسجل قبل /quizzes/{quiz}
+        // وإلا Laravel هيحاول يفهم "history" كأنه id سؤال
+        Route::get('/quizzes/history', [StudentQuizController::class, 'history'])
+            ->name('quizzes.history');
+
+        Route::get('/quizzes/{quiz}', [StudentQuizController::class, 'show'])
+            ->name('quizzes.show');
+
+        Route::post('/quizzes/{quiz}/answer', [StudentQuizController::class, 'store'])
+            ->name('quizzes.answer');
+
     });
 
 // شات المقرر: مشترك بين المحاضر وطلاب المقرر، لذلك التحقق من الصلاحية كامل داخل ChatController
@@ -138,6 +168,12 @@ Route::middleware('auth')
             ->name('store');
 
     });
+
+// حالة السؤال الفوري: مشتركة بين المحاضر (صفحة المتابعة الحية) والطالب (صفحة
+// الإجابة)، نفس سبب اشتراك شات المقرر - التحقق كامل داخل QuizController
+Route::middleware('auth')
+    ->get('/quizzes/{quiz}/status', [QuizController::class, 'status'])
+    ->name('quizzes.status');
 
 Route::middleware('auth')->group(function () {
 

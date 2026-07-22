@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Student;
 use App\Models\CourseOffering;
 use App\Models\Lecture;
 use App\Models\LectureSchedule;
+use App\Models\Quiz;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Collection;
@@ -56,7 +57,21 @@ class DashboardController extends Controller
             ->where('status', 'live')
             ->first();
 
-        return view('student.dashboard', compact('student', 'courseOfferings', 'liveLecture'));
+        // سؤال فوري شغال دلوقتي (إن وجد) لأحد مقررات الطالب. بنحدّث حالته أولاً لو
+        // كان وقته خلص فعلاً بس محدش فتح صفحته من وقتها - نفس نقطة التحديث الكسول
+        // المستخدمة في كل صفحات الكويز
+        $activeQuiz = Quiz::with('courseOffering.course')
+            ->whereIn('course_offering_id', $courseOfferings->pluck('id'))
+            ->where('status', 'active')
+            ->first();
+
+        $activeQuiz?->refreshStatusIfExpired();
+
+        if ($activeQuiz && $activeQuiz->status !== 'active') {
+            $activeQuiz = null;
+        }
+
+        return view('student.dashboard', compact('student', 'courseOfferings', 'liveLecture', 'activeQuiz'));
     }
 
     /**

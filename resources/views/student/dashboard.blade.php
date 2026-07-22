@@ -34,6 +34,28 @@
     </div>
 @endif
 
+{{-- بطاقة بارزة لسؤال فوري شغال دلوقتي - لون مختلف عن بطاقة البث عشان الطالب يميز بينهم بنظرة --}}
+@if($activeQuiz)
+    <div class="card !border-warning !border-2 mb-10 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <span class="relative flex h-3 w-3">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-warning opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-3 w-3 bg-warning"></span>
+            </span>
+            <div>
+                <p class="font-cairo font-bold text-ink">
+                    في اختبار فوري الآن: {{ $activeQuiz->courseOffering->course->name }}
+                </p>
+                <p class="text-xs text-muted">أجب بسرعة قبل ما الوقت يخلص</p>
+            </div>
+        </div>
+
+        <a href="{{ route('student.quizzes.show', $activeQuiz) }}" class="btn-gold">
+            دخول الاختبار
+        </a>
+    </div>
+@endif
+
 {{-- مقررات السمستر الحالي --}}
 <h3 class="section-title mb-4">
     مقررات السمستر الحالي
