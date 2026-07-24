@@ -70,7 +70,15 @@
 const studentStatus = document.getElementById('studentStatus');
 const remoteVideo = document.getElementById('remoteVideo');
 
-const peer = new Peer();
+// لازم نتصل بنفس سيرفر الإشارة المحلي اللي المحاضر متصل بيه (شوف نفس الملاحظة في
+// lecturer/stream.blade.php) - وإلا الطرفين هيبقوا في "قاعتين" مختلفتين وما يشوفوا بعض
+const peer = new Peer(undefined, {
+    host: 'localhost',
+    port: 9000,
+    // نفس ملاحظة lecturer/stream.blade.php: path: '/' هي الصح هنا مع key: 'peerjs'
+    path: '/',
+    key: 'peerjs',
+});
 
 peer.on('open', () => {
     const conn = peer.connect(@json($lecture->meeting_id));
